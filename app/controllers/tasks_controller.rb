@@ -1,15 +1,16 @@
 class TasksController < ApplicationController
     
     def index
-      @tasks = Task.all
+      @tasks = current_user.tasks.order(id: :desc)
     end
     
     def show
-      @task = Task.find(params[:id])
+      @user = User.find(params[:id])
+      @task = @user.Task.find(params[:id])
     end
     
     def create
-      @task = Task.new(task_params)
+      @task = current_user.tasks.build(task_params)
       
       if @task.save
         flash[:success] = 'Taskが正常に登録されました'
